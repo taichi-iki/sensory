@@ -1,9 +1,14 @@
 # coding: utf-8
 
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.patches as patches
-import matplotlib.animation as animation
+
+matplotlib_available=True
+try:
+    import matplotlib.pyplot as plt
+    import matplotlib.patches as patches
+    import matplotlib.animation as animation
+except:
+    matplotlib_available=False
 
 class Environment(object):
     def __init__(self, map_size=(60, 90), input_size=(8, 8), call_reset=True):
@@ -15,15 +20,16 @@ class Environment(object):
                  'gamma3': 0.005,
                  'step_max': 10,
             }
+        self.matplotlib_available = matplotlib_available
         self.agent = None
         self.call_reset = call_reset
         self.reset_state()
     
     def is_in(self, goal, p):
-        if p[1] < goal[0]: return False
-        if p[1] > goal[2]: return False
-        if p[0] < goal[1]: return False
-        if p[0] > goal[3]: return False
+        if p[0] < goal[0]: return False
+        if p[0] > goal[2]: return False
+        if p[1] < goal[1]: return False
+        if p[1] > goal[3]: return False
         return True
     
     def is_solved(self, s):
@@ -167,8 +173,3 @@ class Environment(object):
         ani = animation.FuncAnimation(fig, f, interval=interval)
         plt.show()
 
-if __name__ == '__main__':
-    import random_agent
-    env = Environment()
-    env.agent = random_agent.RandomAgent()
-    env.demonstrate(100)
